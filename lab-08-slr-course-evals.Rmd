@@ -7,7 +7,9 @@ link-citations: true
 ---
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(error = FALSE)
 ```
 
 Many college courses conclude by giving students the opportunity to evaluate the course and the instructor anonymously.
@@ -69,15 +71,50 @@ You can also find this information [here](https://www.openintro.org/data/index.p
     Is this what you expected to see?
     Why, or why not?
     Include any summary statistics and visualizations you use in your response.
+***The distribution is skewed to the left, meaning more students give their professors a high score as not as many students give their professors a low score. This does not really surprised me. I didn't know what to expect. It is interesting to see the mean and median so similar to each other.***
+```{r}
+evals %>%
+  ggplot(aes(x = score)) +
+  geom_histogram()
 
+evals %>%
+  summarise(means = mean(score), medians = median(score), mins = min(score), maxs = max(score), sds = sd(score))
+```
 2.  Visualize and describe the relationship between `score` and `bty_avg`.
+
+***The graph shows a positive relationship between the average beauty rating and the average evaluation rating score, but just a slight increase.***
 
 ```{marginfigure}
 **Hint:** See the help page for the function at http://ggplot2.tidyverse.org/reference/index.html.
 ```
 
+```{r}
+evals %>%
+  ggplot(aes(x = bty_avg, y = score))+
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm",
+              se = FALSE) +
+  xlab("Beauty Average Rating") +
+  ylab("Average Proffessor Evaluation") +
+  ggtitle("Scatter plot of Average Beauty Rating to Average Evaluation Rating Score")
+```
+
+
 3.  Recreate the scatterplot from Exercise 2, but this time use\
     `geom_jitter()`? What does "jitter" mean? What was misleading about the initial scatterplot?
+
+***"Jitter" means that the points are more seperated with space rather than in a straight line like `geom_point`. The initial scatterplot is misleading, for you don't know the exact spot each point lands.***
+    
+```{r}
+evals %>%
+  ggplot(aes(x = bty_avg, y = score))+
+  geom_jitter(alpha = 0.4) +
+  geom_smooth(method = "lm",
+              se = FALSE) +
+  xlab("Beauty Average Rating") +
+  ylab("Average Proffessor Evaluation") +
+  ggtitle("Scatter plot of Average Beauty Rating to Average Evaluation Rating Score")
+```
 
 🧶 ✅ ⬆️ *If you haven't done so recently, knit, commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
